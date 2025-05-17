@@ -8,7 +8,7 @@ mongoose
   .then(() => {
     console.log("Connected to MONGODB");
     app.listen(3000, () => {
-      console.log(`Example app listening on port 3000`);
+      console.log(`Server listening on port 3000`);
     });
   })
   .catch((err) => {
