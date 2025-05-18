@@ -15,5 +15,18 @@ const auth = {
       res.status(500).send(error.message);
     }
   },
+  isAuthenticatedUser: async (req, res, next) => {
+    try {
+      const token = req.cookies.token;
+      if (!token) {
+        return res.send(" unauthorized access");
+      }
+      const decoded = await jwt.verify(token, JWT_SECRET);
+      req.userId  = decoded.userId;
+      next();
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
 };
 module.exports = auth;
