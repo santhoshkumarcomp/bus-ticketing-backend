@@ -6,3 +6,4 @@ homeRouter.get("/", homeController.get);
 homeRouter.post("/", homeController.post);
 
 module.exports = homeRouter;
+//this is home route
