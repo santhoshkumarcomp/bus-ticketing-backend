@@ -46,6 +46,7 @@ const authUserController = {
       });
       res.send("Logged in");
     } catch (error) {
+      console.error("Login error:", error);
       res.status(500).send(error.message);
     }
   },

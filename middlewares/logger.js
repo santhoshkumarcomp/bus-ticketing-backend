@@ -1,4 +1,5 @@
 const logger = (req, res, next) => {
+  console.log(`-------------------------------`);
   console.log(`Request URL: ${req.url}`);
   console.log(`Request Method: ${req.method}`);
   console.log(`Request body: ${req.body}`);
