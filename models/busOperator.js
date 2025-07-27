@@ -15,6 +15,7 @@ const operatorSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      required: true,
     },
     address: {
       type: String,

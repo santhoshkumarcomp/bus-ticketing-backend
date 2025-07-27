@@ -5,7 +5,7 @@ const { JWT_SECRET } = require("../utils/config");
 const authUserController = {
   register: async (req, res) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, phone } = req.body;
       //check whether the user already exist
       const user = await User.findOne({ email });
       if (user) {
@@ -16,10 +16,12 @@ const authUserController = {
         name,
         email,
         password: hashedPassword,
+        phone,
       });
       await newUser.save();
       res.send("User registration success");
     } catch (error) {
+      console.error(error);
       res.status(500).send(error.message);
     }
   },
@@ -32,7 +34,7 @@ const authUserController = {
       }
       const isCorrectPassword = await bcrypt.compare(password, user.password);
       if (!isCorrectPassword) {
-        return res.send("invalid credentials");
+        return res.status(401).send("invalid credentials");
       }
       const token = await jwt.sign({ userId: user._id }, JWT_SECRET, {
         expiresIn: "3h",
