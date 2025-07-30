@@ -12,7 +12,7 @@ const port = 3000;
 
 app.use(
   cors({
-    origin: "https://bus-ticketing-frontend-oilryxke9.vercel.app", // Add your frontend URLs
+    origin: "https://bus-ticketing-frontend.vercel.app", // Add your frontend URLs
     credentials: true,
   })
 );
