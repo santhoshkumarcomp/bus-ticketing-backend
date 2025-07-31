@@ -115,25 +115,35 @@ const homeController = {
     try {
       const userId = req.userId;
       const tickets = await Ticket.find({ "seats.passengerId": userId });
-      
+
       if (!tickets || tickets.length === 0) {
         return res.send("No bookings found");
       }
-      
-      const bookedTickets = await Ticket.find({
+
+      const bookedTicketsFiltered = await Ticket.find({
         "seats.passengerId": userId,
       })
         .populate({
-          path: "seats",
-          match: { passengerId: userId },
-          populate: {
-            path: "passengerId",
-            model: "User",
-            select: "name email phone",
-          },
+          path: "seats.passengerId",
+          model: "User",
+          select: "name email phone",
         })
-        .select("-__v -createdAt -updatedAt -password");
-      res.json(bookedTickets);
+        .populate({
+          path: "busId",
+          model: "Bus",
+          select: "name operator from to departureTime arrivalTime date",
+        })
+        .lean(); // Use lean() for better performance if you don't need mongoose document methods
+      
+      // Filter seats to only include those belonging to the user
+      const filteredResults = bookedTicketsFiltered.map(ticket => ({
+        ...ticket,
+        seats: ticket.seats.filter(seat => 
+          seat.passengerId && seat.passengerId._id.toString() === userId.toString()
+        ),
+      }));
+      
+      res.json(filteredResults);
     } catch (error) {
       res.status(500).send(error.message);
     }
